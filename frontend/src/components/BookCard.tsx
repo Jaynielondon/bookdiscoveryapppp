@@ -1,8 +1,9 @@
-import Link, { type LinkProps } from 'next/link';
+import Link from 'next/link';
+import type { Route } from 'next';
 import { RecommendationResult } from '@/types';
 
 export function BookCard({ result }: { result: RecommendationResult }) {
-  const href: LinkProps['href'] = { pathname: '/book/[id]', query: { id: result.book.id } };
+  const href = `/book/${result.book.id}` as Route;
 
   return (
     <Link href={href} className="rounded-2xl border border-ink/20 bg-panel/70 p-6 transition hover:border-accent/60 hover:bg-panel">

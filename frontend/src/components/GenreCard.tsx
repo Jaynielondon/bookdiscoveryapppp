@@ -1,4 +1,5 @@
-import Link, { type LinkProps } from 'next/link';
+import Link from 'next/link';
+import type { Route } from 'next';
 import type { Genre } from '@/types';
 
 interface GenreCardProps {
@@ -8,7 +9,7 @@ interface GenreCardProps {
 }
 
 export function GenreCard({ slug, name, description }: GenreCardProps) {
-  const href: LinkProps['href'] = { pathname: '/genre/[slug]', query: { slug } };
+  const href = `/genre/${slug}` as Route;
 
   return (
     <Link href={href} className={`genre-${slug} rounded-2xl border border-ink/20 p-7 shadow-soft`}>

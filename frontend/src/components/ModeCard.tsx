@@ -1,9 +1,10 @@
-import Link, { type LinkProps } from 'next/link';
+import Link from 'next/link';
+import type { Route } from 'next';
 
 interface ModeCardProps {
   title: string;
   description: string;
-  href: LinkProps['href'];
+  href: Route;
 }
 
 export function ModeCard({ title, description, href }: ModeCardProps) {
