@@ -117,7 +117,11 @@ def _diversify(ranked: list[dict], limit: int = 8) -> list[dict]:
         seen_authors.add(book['author'])
         signature_counts[signature] += 1
 
-    return selected if selected else ranked[:limit]
+    if not selected:
+        return ranked[:limit]
+
+    selected.sort(key=lambda item: (item['score'], item['overlap_values'], item['book']['popularity']), reverse=True)
+    return selected
 
 
 def recommend(genre: str | None, discovery_mode: str, filters: dict[str, list[str]]):

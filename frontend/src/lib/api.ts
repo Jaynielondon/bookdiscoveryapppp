@@ -1,10 +1,19 @@
 import { API_BASE_URL } from '@/lib/constants';
 import { Book, FilterGroup, Genre, RecommendationResponse } from '@/types';
 
+export class ApiError extends Error {
+  status: number;
+
+  constructor(status: number, message: string) {
+    super(message);
+    this.status = status;
+  }
+}
+
 async function handle<T>(res: Response): Promise<T> {
   if (!res.ok) {
     const message = await res.text();
-    throw new Error(message || `API error: ${res.status}`);
+    throw new ApiError(res.status, message || `API error: ${res.status}`);
   }
   return res.json();
 }

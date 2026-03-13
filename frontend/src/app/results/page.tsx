@@ -27,16 +27,28 @@ export default function ResultsPage() {
   const selectedCount = useMemo(() => Object.values(filters).flat().length, [filters]);
 
   useEffect(() => {
+    let isCurrent = true;
     setState('loading');
+    setData(null);
+
     recommend({ genre, discovery_mode: mode, filters })
       .then((response) => {
+        if (!isCurrent) return;
         setData(response);
         setState('ready');
       })
-      .catch(() => setState('error'));
+      .catch(() => {
+        if (!isCurrent) return;
+        setData(null);
+        setState('error');
+      });
+
+    return () => {
+      isCurrent = false;
+    };
   }, [genre, mode, filters]);
 
-  const results = data?.results ?? [];
+  const results = state === 'ready' ? (data?.results ?? []) : [];
 
   return (
     <AppShell>
@@ -52,13 +64,13 @@ export default function ResultsPage() {
         </div>
       </div>
 
-      {data?.strategy === 'relaxed' && (
+      {state === 'ready' && data?.strategy === 'relaxed' && (
         <div className="mb-8 rounded-2xl border border-amber-300/30 bg-amber-100/10 p-4 text-sm text-amber-100">
           Your filters are highly specific. We broadened matching to preserve narrative intent while avoiding empty shelves.
         </div>
       )}
 
-      {data?.strategy === 'fallback' && (
+      {state === 'ready' && data?.strategy === 'fallback' && (
         <div className="mb-8 rounded-2xl border border-ink/20 bg-panel/60 p-4 text-sm text-ink/75">
           We could not find a close overlap for this exact blend. Showing a fallback shelf ranked for this discovery lane.
         </div>
@@ -86,11 +98,13 @@ export default function ResultsPage() {
         </div>
       )}
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        {results.map((result) => (
-          <BookCard key={result.book.id} result={result} />
-        ))}
-      </div>
+      {state === 'ready' && (
+        <div className="grid gap-4 lg:grid-cols-2">
+          {results.map((result) => (
+            <BookCard key={result.book.id} result={result} />
+          ))}
+        </div>
+      )}
     </AppShell>
   );
 }

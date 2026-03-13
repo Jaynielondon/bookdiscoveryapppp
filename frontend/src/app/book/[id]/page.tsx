@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { AppShell } from '@/components/AppShell';
-import { getBook } from '@/lib/api';
+import { ApiError, getBook } from '@/lib/api';
 
 export const dynamic = 'force-dynamic';
 
@@ -50,7 +50,10 @@ export default async function BookDetailPage({ params }: { params: { id: string 
         </article>
       </AppShell>
     );
-  } catch {
-    notFound();
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 404) {
+      notFound();
+    }
+    throw error;
   }
 }
