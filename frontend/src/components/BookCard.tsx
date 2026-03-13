@@ -1,12 +1,11 @@
-import Link from 'next/link';
+import Link, { type LinkProps } from 'next/link';
 import { RecommendationResult } from '@/types';
 
 export function BookCard({ result }: { result: RecommendationResult }) {
+  const href: LinkProps['href'] = { pathname: '/book/[id]', query: { id: result.book.id } };
+
   return (
-    <Link
-      href={`/book/${result.book.id}`}
-      className="rounded-2xl border border-ink/20 bg-panel/70 p-6 transition hover:border-accent/60 hover:bg-panel"
-    >
+    <Link href={href} className="rounded-2xl border border-ink/20 bg-panel/70 p-6 transition hover:border-accent/60 hover:bg-panel">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-xs uppercase tracking-[0.14em] text-ink/55">{result.book.genre.replace('-', ' ')}</p>

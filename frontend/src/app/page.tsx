@@ -1,3 +1,4 @@
+import type { LinkProps } from 'next/link';
 import { AppShell } from '@/components/AppShell';
 import { ModeCard } from '@/components/ModeCard';
 import { DISCOVERY_MODES, GENRES } from '@/lib/constants';
@@ -18,14 +19,12 @@ export default function HomePage() {
       <section className="mb-12">
         <h2 className="mb-4 text-2xl">Discovery Paths</h2>
         <div className="grid gap-4 md:grid-cols-2">
-          {DISCOVERY_MODES.map((mode) => (
-            <ModeCard
-              key={mode.id}
-              title={mode.label}
-              description={mode.description}
-              href={mode.id === 'genre' ? '/genre-selection' : `/results?mode=${mode.id}`}
-            />
-          ))}
+          {DISCOVERY_MODES.map((mode) => {
+            const href: LinkProps['href'] =
+              mode.id === 'genre' ? '/genre-selection' : { pathname: '/results', query: { mode: mode.id } };
+
+            return <ModeCard key={mode.id} title={mode.label} description={mode.description} href={href} />;
+          })}
         </div>
       </section>
 

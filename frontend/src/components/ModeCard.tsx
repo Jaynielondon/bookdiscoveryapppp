@@ -1,6 +1,12 @@
-import Link from 'next/link';
+import Link, { type LinkProps } from 'next/link';
 
-export function ModeCard({ title, description, href }: { title: string; description: string; href: string }) {
+interface ModeCardProps {
+  title: string;
+  description: string;
+  href: LinkProps['href'];
+}
+
+export function ModeCard({ title, description, href }: ModeCardProps) {
   return (
     <Link
       href={href}
