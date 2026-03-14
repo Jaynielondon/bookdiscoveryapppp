@@ -72,10 +72,26 @@ npm install
 npm run dev
 ```
 
-### 3) Optional frontend environment variable
+
+### 3) Frontend/Backend URL strategy (reliable local + Codespaces)
+The frontend uses a same-origin proxy path (`/api/backend`) in the browser and an internal server URL for server-side fetches.
+
+Frontend env options:
 ```bash
-NEXT_PUBLIC_API_URL=http://localhost:8000
+# Where Next.js rewrites /api/backend/* in dev/build
+BACKEND_ORIGIN=http://127.0.0.1:8000
+
+# Optional override for server-side fetches (defaults to BACKEND_ORIGIN)
+INTERNAL_API_URL=http://127.0.0.1:8000
 ```
+
+Backend CORS env option:
+```bash
+# Optional explicit frontend origin (default: http://localhost:3000)
+FRONTEND_ORIGIN=http://localhost:3000
+```
+
+In Codespaces, keep backend on port 8000 and frontend on 3000; this proxy strategy avoids browser CORS and localhost mismatch issues.
 
 ### 4) Open app
 - Visit `http://localhost:3000`

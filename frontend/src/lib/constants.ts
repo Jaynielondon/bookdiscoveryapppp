@@ -1,6 +1,8 @@
 import { DiscoveryMode, Genre } from '@/types';
 
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
+export const BROWSER_API_BASE = '/api/backend';
+export const SERVER_API_BASE =
+  process.env.INTERNAL_API_URL ?? process.env.BACKEND_ORIGIN ?? 'http://127.0.0.1:8000';
 
 export const GENRES: { slug: Genre; name: string; description: string }[] = [
   { slug: 'fantasy', name: 'Fantasy', description: 'Mythic worlds, magic systems, and epic emotional stakes.' },

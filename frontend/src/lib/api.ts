@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/lib/constants';
+import { BROWSER_API_BASE, SERVER_API_BASE } from '@/lib/constants';
 import { Book, FilterGroup, Genre, RecommendationResponse } from '@/types';
 
 export class ApiError extends Error {
@@ -8,6 +8,10 @@ export class ApiError extends Error {
     super(message);
     this.status = status;
   }
+}
+
+function getApiBaseUrl(): string {
+  return typeof window === 'undefined' ? SERVER_API_BASE : BROWSER_API_BASE;
 }
 
 async function handle<T>(res: Response): Promise<T> {
@@ -20,11 +24,11 @@ async function handle<T>(res: Response): Promise<T> {
 
 export async function getTaxonomy(genre?: Genre): Promise<FilterGroup[]> {
   const q = genre ? `?genre=${genre}` : '';
-  return handle(await fetch(`${API_BASE_URL}/taxonomy${q}`, { cache: 'no-store' }));
+  return handle(await fetch(`${getApiBaseUrl()}/taxonomy${q}`, { cache: 'no-store' }));
 }
 
 export async function getBook(id: string): Promise<Book> {
-  return handle(await fetch(`${API_BASE_URL}/books/${id}`, { cache: 'no-store' }));
+  return handle(await fetch(`${getApiBaseUrl()}/books/${id}`, { cache: 'no-store' }));
 }
 
 export async function recommend(payload: {
@@ -33,7 +37,7 @@ export async function recommend(payload: {
   filters: Record<string, string[]>;
 }): Promise<RecommendationResponse> {
   return handle(
-    await fetch(`${API_BASE_URL}/recommendations`, {
+    await fetch(`${getApiBaseUrl()}/recommendations`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
